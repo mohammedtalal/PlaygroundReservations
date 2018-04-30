@@ -7,9 +7,5 @@
 
 
     @section('header')
-
-
-
     @section('contents')
-
 @endsection    
