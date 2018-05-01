@@ -8,24 +8,35 @@ Route::Auth();
 Auth::routes();
 
 /*================ Start Dashboard Routes  ================*/
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth:web'], function () {
 	Route::get('/', ['as' => 'dashboard','uses' => 'IndexController@index']);
 	Route::get('/dashboard', ['as' => 'dashboard','uses' => 'IndexController@index']);
-});
-/*================ End Dashboard Routes  ================*/
-Route::group(['middleware' => 'auth:web'], function () {
+
+
+	/*==================== Users Routes ====================*/
 	Route::get('admin/users','UserController@index')->name('users.index');
+	Route::get('admin/user/{id}/view','UserController@view')->name('users.view');
 	Route::get('admin/user/create','UserController@create')->name('users.create');
 	Route::post('admin/user/store','UserController@store')->name('users.store');
-	Route::get('admin/edit/{id}','UserController@edit')->name('users.edit');
-	Route::post('admin/update/{id}','UserController@update')->name('users.update');
-	Route::post('admin/user/destroy','UserController@destroy')->name('users.destroy');
-});
+	Route::get('admin/user/{id}/edit','UserController@edit')->name('users.edit');
+	Route::post('admin/user/{id}/update','UserController@update')->name('users.update');
+	Route::delete('admin/user/{id}/destroy','UserController@destroy')->name('users.destroy');
 
-Route::group(['prefix' => 'api', 'middleware' => 'auth:api'], function () {
-	
+	/*==================== Playgrounds Routes ====================*/
+	Route::get('admin/playgrounds','PlaygroundController@index')->name('playgrounds.index');
+	Route::get('admin/playground/{id}/view','PlaygroundController@view')->name('playgrounds.view');
+	Route::get('admin/playground/create','PlaygroundController@create')->name('playgrounds.create');
+	Route::post('admin/playground/store','PlaygroundController@store')->name('playgrounds.store');
+	Route::get('admin/playground/{id}/edit','PlaygroundController@edit')->name('playgrounds.edit');
+	Route::post('admin/playground/{id}/update','PlaygroundController@update')->name('playgrounds.update');
+	Route::delete('admin/playground/{id}/destroy','PlaygroundController@destroy')->name('playgrounds.destroy');
 });
+/*================ End Dashboard Routes  ================*/
 
+
+
+// Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
+// Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
 
 
 Route::get('/home', 'HomeController@index')->name('home');

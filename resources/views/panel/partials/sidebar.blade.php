@@ -32,6 +32,7 @@
         </li>
         
         @if(Auth::user()->role_id == 1)
+          <!-- ============== Playground ========== -->
           <li class="treeview">
             <a href="#">
               <i class="fa fa-laptop"></i>
@@ -41,10 +42,24 @@
               </span>
             </a>
             <ul class="treeview-menu">
+              <li><a href="{{ route('users.create')}}"><i class="fa fa-circle-o"></i>Create New User</a></li>
               <li><a href="{{ route('users.index') }}"><i class="fa fa-circle-o"></i>All Users</a></li>
-              <li><a href=""><i class="fa fa-circle-o"></i> Buttons</a></li>
-              <li><a href="#"><i class="fa fa-circle-o"></i> Timeline</a></li>
-              <li><a href="#"><i class="fa fa-circle-o"></i> Modals</a></li>
+
+            </ul>
+          </li>
+
+          <!-- ============== Playground ========== -->
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-laptop"></i>
+              <span>Playgrounds</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{{ route('playgrounds.create')}}"><i class="fa fa-circle-o"></i>Create New Playground</a></li>
+              <li><a href="{{ route('playgrounds.index') }}"><i class="fa fa-circle-o"></i>All Playgrounds</a></li>
             </ul>
           </li>
 

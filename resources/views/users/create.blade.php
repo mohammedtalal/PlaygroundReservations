@@ -1,21 +1,19 @@
-@extends('master')
+@extends('panel.index')
+
+@section('header')
+    <h1>Create New User</h1>
+@endsection
 
 @section('contents')
-	<div class="row">
-	<div class="col-md-12 ">
-	<!-- general form elements disabled -->
-		<div class="box box-warning">
-			<div class="box-header with-border">
-			  <h3 class="box-title">Create New User</h3>
-			</div>
-			<div class="box-body">
-				<form class="form-horizontal" method="POST" action="{{ route('users.store') }}">
+     <div class="row">
+       <div class="col-md-12 ">
+				<form method="POST" action="{{ route('users.store') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
+                            <label for="name" class="" control-label">Name</label>
                                 <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
 
                                 @if ($errors->has('name'))
@@ -26,10 +24,23 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+                        <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
+                            <label for="phone" class="" control-label">Phone</label>
+                                <input id="email" type="text" class="form-control" name="phone" value="{{ old('phone') }}" required>
+                                @if ($errors->has('phone'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+
+                            <div class="col-md-12">
+                            <label for="email" class="" control-label">E-Mail Address</label>
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
 
                                 @if ($errors->has('email'))
@@ -41,9 +52,9 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
+                            <label for="password" class="" control-label">Password</label>
                                 <input id="password" type="password" class="form-control" name="password" required>
 
                                 @if ($errors->has('password'))
@@ -55,18 +66,19 @@
                         </div>        
 
                         <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
+                            <label for="password-confirm" class="" control-label">Confirm Password</label>
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
-                            <label for="type" class="col-md-4 control-label">Type</label>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
+                            <label for="type" class="" control-label">Type</label>
                             	<select class="form-control" name="role_id" id="type">
+                                    <option value= "#" selected> please select role </option>
                             		@foreach($roles as $key => $role)
 							        	<option value="{{ $role->id }}"> {{ $role->name }} </option>
                             		@endforeach
@@ -79,17 +91,13 @@
                                 @endif
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
-                            </div>
+                        
+                        <div class="form-groub col-md-12 ">
+                            <button type="submit" class="btn btn-primary">
+                                Register
+                            </button>
                         </div>
                     </form>
 			</div>
 		</div>
-	</div>	
-</div>
 @endsection

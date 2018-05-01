@@ -1,12 +1,15 @@
 <!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | @yield('name')</title>
-
+  <title>Dashboard</title>
+  <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
   @section('css')
         {{ Html::style('css/app.css')}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -18,37 +21,49 @@
         {{ Html::style('LTE/css/AdminLTE.min.css')}}
         {{ Html::style('LTE/css/skins/_all-skins.min.css')}}
   @show
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="skin-blue">
 <div class="wrapper">
 
-  @include('panel/partials.header')
-  <!-- Left side column. contains the logo and sidebar -->
-  @include('panel/partials.sidebar')
+    <!-- Header -->
+    @include('panel/partials.header')
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-        @yield('contents')
-  </div>
-  <!-- /.content-wrapper -->
+    <!-- Sidebar -->
+    @include('panel/partials.sidebar')
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.3.8
-    </div>
-    <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-    reserved.
-  </footer>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                @yield('header')
+            </h1>
+        </section>
+        @include('panel/partials.flashMessage')
+        <!-- Main content -->
 
-</div>
+        <section class="content">
+            <!-- Your Page Content Here -->
+            @yield('contents')
+        </section><!-- /.content -->
 
-  @section('script')
+    </div><!-- /.content-wrapper -->
+
+    <!-- Footer -->
+    <footer>
+      @yield('footer')
+    </footer>
+    
+
+</div><!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+@section('script')
        {{ Html::script('plugins/jQuery/jquery-2.2.3.min.js') }}
        {{ Html::script('js/app.js') }}
        {{ Html::script('plugins/fastclick/fastclick.js') }}
@@ -64,6 +79,13 @@
        {{ Html::script('LTE/js/demo.js') }}
   @show  
   @yield('extra-script')
-
 </body>
 </html>
+
+
+
+
+
+
+
+  
