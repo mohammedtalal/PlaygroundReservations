@@ -2,10 +2,11 @@
 
 namespace App;
 
+use App\Slot;
 use App\User;
+use File;
 use Illuminate\Database\Eloquent\Model;
 use Request;
-use File;
 
 class Playground extends Model
 {
@@ -15,6 +16,16 @@ class Playground extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * ManyToMany relation
+     * between Slot and Playground
+     * belongsToMany(relation Model name, pivotTable name, current model id, id of relation model)
+    */
+    public function slots() {
+        return $this->belongsToMany(Slot::class, 'playground_slot');
+    }
+
 
     public function deleteFile($file_name = "", $path = "uploads/") {
 	    if (!@$file_name) return false;

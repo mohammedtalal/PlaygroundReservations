@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlaygroundTable extends Migration
+class CreateSlotsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreatePlaygroundTable extends Migration
      */
     public function up()
     {
-        Schema::create('playgrounds', function (Blueprint $table) {
+        Schema::create('slots', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->longText('details');
-            $table->text('address');
-            $table->text('image')->nullable();
-
-            $table->integer('user_id')->unsigned();
+            $table->integer('from');
+            $table->integer('to');
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -32,7 +29,6 @@ class CreatePlaygroundTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('playgrounds');
-
+        Schema::dropIfExists('slots');
     }
 }

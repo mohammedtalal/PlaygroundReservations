@@ -30,7 +30,7 @@
                         <div class="form-group" >
                             <label for="details" class="col-md-4 control-label">Playground details</label>
                             <div class="col-md-6">
-                                <textarea name="details" id="details" cols="74" rows="10">{{ $playground->details }}</textarea>
+                                <textarea name="details" id="details" cols="72" rows="10">{{ $playground->details }}</textarea>
                             </div>
                         </div>
 
@@ -52,6 +52,21 @@
                                 <img src="{{ asset('uploads/'.$playground->image) }}" style="width: 50px;height: 60px;">
                                 <input id="image" type="file" class="form-control" name="image" accept="image/*" >
                             </div>
+                        </div>
+                        @php
+                            foreach ($playground->slots as $value) {
+                                $newSlot = $value->pivot->slot_id;
+                            }
+                        @endphp
+                        <div class="col-md-12">
+                            @foreach($slots as $key => $slot)
+                                <div class="col-md-4">
+                                    <input class="form-check-input" type="checkbox" name="slots[]"  value="{{ $slot->id }}"
+                                    {{ $slot->id == $newSlot ? 'checked' : '' }} >
+                                   
+                                  <label class="form-check-label" for="defaultCheck"> {{ $slot->from ." : ".  $slot->to ." ". $slot->status }} </label>
+                                </div>
+                            @endforeach
                         </div>
 
                         <div class="form-group">

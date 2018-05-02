@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Playground;
+use App\Slot;
 use App\User;
-use Illuminate\Http\Request;
 use File;
+use Illuminate\Http\Request;
 
 class PlaygroundController extends Controller
 {
@@ -25,7 +26,8 @@ class PlaygroundController extends Controller
 
     public function create() {
         $users = User::all();
-        return view('playgrounds.create',compact('users'));
+        $slots = Slot::all();
+        return view('playgrounds.create',compact('users','slots'));
     }
 
     public function store(Request $request) {
@@ -37,18 +39,27 @@ class PlaygroundController extends Controller
             'image'    => 'image'
 
         ]);
+        // dd($request->all());
          if ($playground = Playground::create($request->all())) {
             $playground->uploadFile('image',$playground);
-
+            
+            // check if owner selected hours
+            if (isset($request->slots)) {
+                $playground->slots()->sync($request->slots);   
+            } else {
+                $playground->slots()->sync(array());
+            }
             return redirect()->route('playgrounds.index')->with('success','Created Playground Successfully');
         }
         return redirect()->back()->with('danger','Failed to save');
     }
 
     public function edit($id) {
-    	$playground = Playground::findOrFail($id);
+    	$playground = Playground::with('playground_slot')->findOrFail($id);
+        dd($playground);
         $users = User::all();
-        return view('playgrounds.edit',compact('playground', 'users'));
+        $slots = Slot::all();
+        return view('playgrounds.edit',compact('playground', 'users', 'slots'));
     }
 
     public function update(Request $request, $id) {
@@ -63,7 +74,12 @@ class PlaygroundController extends Controller
 
          if ($playground->update($request->all())) {
             $playground->uploadFile('image',$playground);
-            // dd($playground);
+            
+            if (isset($request->slots)) {
+                $playground->slots()->sync($request->slots);   
+            } else {
+                $playground->slots()->sync(array());
+            }
             return redirect()->route('playgrounds.index')->with('success','Updated Successfully');
         }
         return redirect()->back()->with('danger','Failed to update');

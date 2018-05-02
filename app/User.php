@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Playground;
+use App\Reservation;
 use App\Role;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -39,6 +40,12 @@ class User extends Authenticatable implements JWTSubject
     public function playgrounds(){
         return $this->hasnMany(Playground::class);
     }
+
+    public function reservations(){
+        return $this->belongsToMany(Reservation::class);
+    }
+
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
