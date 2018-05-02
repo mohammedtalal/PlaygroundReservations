@@ -73,8 +73,8 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="#"><i class="fa fa-circle-o"></i>Create Schedule</a></li>
-              <li><a href="#"><i class="fa fa-circle-o"></i>All Schedules</a></li>
+              <li><a href="{{ route('playgroundSlot.create') }}"><i class="fa fa-circle-o"></i>Create Schedule</a></li>
+              <li><a href="{{ route('playgroundSlot.index') }}"><i class="fa fa-circle-o"></i>All Schedules</a></li>
             </ul>
           </li>
 

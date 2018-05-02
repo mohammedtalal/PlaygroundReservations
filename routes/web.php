@@ -30,6 +30,15 @@ Route::group(['middleware' => 'auth:web'], function () {
 	Route::get('admin/playground/{id}/edit','PlaygroundController@edit')->name('playgrounds.edit');
 	Route::post('admin/playground/{id}/update','PlaygroundController@update')->name('playgrounds.update');
 	Route::delete('admin/playground/{id}/destroy','PlaygroundController@destroy')->name('playgrounds.destroy');
+
+	/*==================== Playground_Slots Routes ====================*/
+	Route::get('admin/schedules','SlotController@index')->name('playgroundSlot.index');
+	Route::get('admin/schedules/{id}/view','SlotController@view')->name('playgroundSlot.view');
+	Route::get('admin/schedules/create','SlotController@create')->name('playgroundSlot.create');
+	Route::post('admin/schedules/store','SlotController@store')->name('playgroundSlot.store');
+	Route::get('admin/schedules/{id}/edit','SlotController@edit')->name('playgroundSlot.edit');
+	Route::post('admin/schedules/{id}/update','SlotController@update')->name('playgroundSlot.update');
+	Route::delete('admin/schedules/{id}/destroy','SlotController@destroy')->name('playgroundSlot.destroy');
 });
 /*================ End Dashboard Routes  ================*/
 

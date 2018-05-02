@@ -55,8 +55,9 @@ class PlaygroundController extends Controller
     }
 
     public function edit($id) {
-    	$playground = Playground::with('playground_slot')->findOrFail($id);
+    	$playground = Playground::findOrFail($id)->slots()->get();
         dd($playground);
+        $ss = $playground->slots;
         $users = User::all();
         $slots = Slot::all();
         return view('playgrounds.edit',compact('playground', 'users', 'slots'));
