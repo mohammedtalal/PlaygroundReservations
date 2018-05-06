@@ -38,6 +38,14 @@
             <td width="25%" class="align-left">Owner phone</td>
             <td width="75%" class="align-left">{{ $playground->user->phone }}</td>
         </tr>
+        <tr>
+            <td width="25%" class="align-left">Available Hours</td>
+            <td width="75%" class="align-left"> 
+                    @foreach($playground->slots as $slot)
+                        <li class="indent">{{ $slot->from .' : '. $slot->to  ."  ". strtoupper($slot->status) }}</li>
+                    @endforeach
+            </td>
+        </tr>
 
     </table>
 </div>

@@ -39,7 +39,6 @@ class PlaygroundController extends Controller
             'image'    => 'image'
 
         ]);
-        // dd($request->all());
          if ($playground = Playground::create($request->all())) {
             $playground->uploadFile('image',$playground);
             
@@ -55,12 +54,10 @@ class PlaygroundController extends Controller
     }
 
     public function edit($id) {
-    	$playground = Playground::findOrFail($id)->slots()->get();
-        dd($playground);
-        $ss = $playground->slots;
+    	$playground = Playground::findOrFail($id);
         $users = User::all();
         $slots = Slot::all();
-        return view('playgrounds.edit',compact('playground', 'users', 'slots'));
+        return view('playgrounds.edit',compact('playground', 'users', 'slots', 'slo'));
     }
 
     public function update(Request $request, $id) {
@@ -81,17 +78,20 @@ class PlaygroundController extends Controller
             } else {
                 $playground->slots()->sync(array());
             }
-            return redirect()->route('playgrounds.index')->with('success','Updated Successfully');
+            return redirect()->back()->with('success','Updated Successfully');
         }
         return redirect()->back()->with('danger','Failed to update');
-
     }   
 
     public function destroy($id) {
     	$playground = Playground::findOrFail($id);
         $playground->delete();
         return redirect()->route('playgrounds.index')->with('danger','User deleted successfully');
+    }
 
+    public function ownerPlaygrounds($id) {
+        $playgrounds = Playground::with('user')->where('user_id', $id)->get();
+        return view('playgrounds.show',compact('playgrounds'));
     }
 
 }

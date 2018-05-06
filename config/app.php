@@ -179,8 +179,7 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
     ],
 
     /*
@@ -232,8 +231,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
-        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class, 
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
+        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
 
     ],
 

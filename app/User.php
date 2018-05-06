@@ -5,13 +5,14 @@ namespace App;
 use App\Playground;
 use App\Reservation;
 use App\Role;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
-
-class User extends Authenticatable implements JWTSubject
+// implements JWTSubject
+class User extends Authenticatable 
 {
     use Notifiable;
 
@@ -45,6 +46,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Reservation::class);
     }
 
+    public function hasRole($role)
+    {
+      return null !== $this->role()->where('name', $role)->first();
+    }
 
 
     /**

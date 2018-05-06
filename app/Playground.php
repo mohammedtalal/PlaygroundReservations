@@ -23,7 +23,11 @@ class Playground extends Model
      * belongsToMany(relation Model name, pivotTable name, current model id, id of relation model)
     */
     public function slots() {
-        return $this->belongsToMany(Slot::class, 'playground_slot');
+        return $this->belongsToMany(Slot::class, 'playground_slot', 'playground_id', 'slot_id');
+    }
+
+    public function hasSlot() {
+        return $this->belongsToMany(Slot::class, 'playground_slot', 'playground_id', 'slot_id');
     }
 
 

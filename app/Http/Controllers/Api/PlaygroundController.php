@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Http\Controllers\Controller;
 use App\Playground;
+use App\User;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class PlaygroundController extends BaseController
 {
-
     public function index() {
     	$playgrounds = Playground::all();
     	if (! empty($playgrounds)) {
@@ -20,11 +20,13 @@ class PlaygroundController extends BaseController
     	return $this->sendError('Data not found.');
     }
 
-    // fetch 1 playground by id
-    public function show(){
+    // fetch playgrounds that belongs to auth user
+    public function show(User $id){
 
     	try {
-    		$playground = JWTAuth::parseToken()->toUser();
+    		// $playground = JWTAuth::parseToken()->toUser();
+            // $playground = Playground::find($id);    
+            $playground = Playground::with('user')->where('user_id', auth()->user()->id)->get();
     		if (! $playground) {
     			return $this->response->errorNotFound('playground not found');
     		}

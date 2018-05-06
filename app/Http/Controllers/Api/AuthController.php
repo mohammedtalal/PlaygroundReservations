@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
-use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 // use Tymon\JWTAuth\Facades\JWTAuth;
-use Validator, DB, Hash, Mail, Illuminate\Support\Facades\Password;
+use JWTAuth;
+use Validator;
 
 
 class AuthController extends Controller
@@ -21,7 +21,6 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login']]);
-    
     }
     /**
      * API Register
@@ -89,7 +88,7 @@ class AuthController extends Controller
         // $this->validate($request, ['token' => 'required']);
         if (! JWTAuth::invalidate($request->input('token'))) {
             return response()->json(['success' => false, 'error' => 'cant logout.'], 401);
-        }
+        }   
         try {
             JWTAuth::invalidate($request->input('token'));
             return response()->json(['success' => true, 'message'=> "You have successfully logged out."]);

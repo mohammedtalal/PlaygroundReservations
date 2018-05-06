@@ -31,7 +31,7 @@
           </a>
         </li>
         
-        @if(Auth::user()->role_id == 1)
+        @if(Auth::user()->hasRole('admin'))
           <!-- ============== Users ========== -->
           <li class="treeview">
             <a href="#">
@@ -77,10 +77,10 @@
               <li><a href="{{ route('playgroundSlot.index') }}"><i class="fa fa-circle-o"></i>All Schedules</a></li>
             </ul>
           </li>
-
-        @elseif(Auth::user()->role_id == 2)
+        @elseif(Auth::user()->hasRole('moder'))
+        {{-- {{ dd(Auth::user()->role->name) }} --}}
           <li class="treeview">
-            <a href="#">
+            <a href="{{ route('ownerPlaygrounds.index',auth()->id()) }}">
               <i class="fa fa-laptop"></i>
               <span>My Playgrounds</span>
             </a>

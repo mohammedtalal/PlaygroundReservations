@@ -1,5 +1,9 @@
 @extends('panel.index')
-
+@section('header')
+<a href="{{route('ownerPlaygrounds.index',$playground->id)}}" class="btn btn-danger">
+    <i class="fa fa-backward">Go Back</i> 
+</a>
+@endsection
 @section('contents')
 
 	<div class="row">
@@ -53,17 +57,10 @@
                                 <input id="image" type="file" class="form-control" name="image" accept="image/*" >
                             </div>
                         </div>
-                        @php
-                            foreach ($playground->slots as $value) {
-                                $newSlot = $value->pivot->slot_id;
-                            }
-                        @endphp
                         <div class="col-md-12">
                             @foreach($slots as $key => $slot)
                                 <div class="col-md-4">
-                                    <input class="form-check-input" type="checkbox" name="slots[]"  value="{{ $slot->id }}"
-                                    {{ $slot->id == $newSlot ? 'checked' : '' }} >
-                                   
+                                   <input type="checkbox" name="slots[]" {{ $playground->slots->contains($slot->id) ? 'checked' : '' }} value="{{ $slot->id }}">
                                   <label class="form-check-label" for="defaultCheck"> {{ $slot->from ." : ".  $slot->to ." ". $slot->status }} </label>
                                 </div>
                             @endforeach
