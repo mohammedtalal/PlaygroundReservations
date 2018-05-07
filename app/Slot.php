@@ -17,4 +17,5 @@ class Slot extends Model
     public function playgrounds() {
         return $this->belongsToMany(Playground::class, 'playground_slot');
     }
+  
 }

@@ -1,7 +1,11 @@
 <?php
 
+use App\Playground;
+use App\PlaygroundSlot;
+use App\Slot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 
 Route::Auth();
@@ -31,9 +35,13 @@ Route::group(['middleware' => 'auth:web'], function () {
 	Route::post('admin/PL/{id}/update','PlaygroundController@update')->name('playgrounds.update');
 	Route::delete('admin/PL/{id}/destroy','PlaygroundController@destroy')->name('playgrounds.destroy')->middleware('role:admin');
 
-	// fetch owner playgrounds
+	// get All owner playgrounds
 	Route::get('admin/{id}/PL','PlaygroundController@ownerPlaygrounds')->name('ownerPlaygrounds.index'); 
+	// get owner playground schedule view
+	Route::get('admin/PL/{id}/schedule/create','PlaygroundController@createPlaygroundSchedule')->name('playgroundSchedule.create'); 
+	Route::post('admin/PL/{id}/schedule/store','PlaygroundController@storePlaygroundSchedule')->name('playgroundSchedule.store'); 
 
+Route::get('admin/pl', 'PlaygroundController@getChecks');
 	/*==================== Playground_Slots Routes ====================*/
 	Route::get('admin/schedules','SlotController@index')->name('playgroundSlot.index');
 	Route::get('admin/schedules/{id}/view','SlotController@view')->name('playgroundSlot.view');

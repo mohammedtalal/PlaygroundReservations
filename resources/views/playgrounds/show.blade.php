@@ -36,7 +36,10 @@
                             <span>Edit</span>
                         </a>
                         <a href="{{ route('playgrounds.view',$playground->id) }}" class='btn btn-primary btn-xs'>
-                            <span>view</span>
+                            <span>View</span>
+                        </a>
+                        <a href="{{ route('playgroundSchedule.create',$playground->id) }}" class='btn btn-primary btn-xs'>
+                            <span>Schedule</span>
                         </a>
                     </div>
                 </td>

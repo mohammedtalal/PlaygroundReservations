@@ -17,7 +17,8 @@ class CreatePlaygroundSlotTable extends Migration
             $table->increments('id');
             $table->integer('playground_id')->unsigned();
             $table->integer('slot_id')->unsigned();
-            $table->primary(['playground_id','slot_id']);
+            $table->date('date')->nullable();
+            // $table->primary(['playground_id','slot_id']);
         });
     }
 
@@ -28,7 +29,6 @@ class CreatePlaygroundSlotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('playground_slot1');
-
+        Schema::dropIfExists('playground_slot');
     }
 }

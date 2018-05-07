@@ -78,6 +78,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
        {{ Html::script('LTE/js/pages/dashboard2.js') }}
        {{ Html::script('LTE/js/demo.js') }}
   @show  
+
   @yield('extra-script')
 </body>
 </html>
