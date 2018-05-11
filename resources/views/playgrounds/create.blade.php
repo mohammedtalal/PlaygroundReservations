@@ -36,12 +36,17 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="cost" class="col-md-4 control-label">Playground Cost</label>
+                            <div class="col-md-6">
+                                <input id="cost" type="number" class="form-control" name="cost" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="user_id" class="col-md-4 control-label">Owner name</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="user_id" id="type">
-                                    @foreach($users as $key => $user)
-                                        <option value="{{ $user->id }}"> {{ $user->name }} </option>
-                                    @endforeach
+                                        <option value="{{ auth()->id() }}"> {{ auth()->user()->name }} </option>
                                 </select>
                             </div>
                         </div>
@@ -52,15 +57,6 @@
                                 <input id="image" type="file" class="form-control" name="image" accept="image/*" >
                             </div>
                         </div>
-
-                    <div class="col-md-12">
-                        @foreach($slots as $key => $slot)
-                            <div class="col-md-4">
-                              <input class="form-check-input" type="checkbox" name="slots[]"  value="{{ $slot->id }}">
-                              <label class="form-check-label" for="defaultCheck"> {{ $slot->from ." : ".  $slot->to ." ". $slot->status }} </label>
-                            </div>
-                        @endforeach
-                    </div>
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">

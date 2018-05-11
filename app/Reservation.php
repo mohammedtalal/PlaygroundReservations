@@ -2,13 +2,24 @@
 
 namespace App;
 
+use App\Playground;
+use App\Slot;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    protected $fillable = [];
+    protected $fillable = ['user_id','slot_id','playground_id','date','playground_cost'];
 
-    public function reservations(){
-        return $this->belongsToMany(Reservation::class);
+    public function users(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function playground() {
+        return $this->belongsTo(Playground::class);
+    }
+
+    public function slots() {
+    	return $this->belongsTo(Slot::class);
     }
 }

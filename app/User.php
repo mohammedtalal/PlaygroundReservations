@@ -5,7 +5,7 @@ namespace App;
 use App\Playground;
 use App\Reservation;
 use App\Role;
-
+use App\Slot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -39,11 +39,15 @@ class User extends Authenticatable
     }
 
     public function playgrounds(){
-        return $this->hasnMany(Playground::class);
+        return $this->hasMany(Playground::class);
     }
 
     public function reservations(){
-        return $this->belongsToMany(Reservation::class);
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function slots() {
+        return $this->hasMany(Slot::class);
     }
 
     public function hasRole($role)

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Reservation;
 use App\Slot;
 use App\User;
 use File;
@@ -11,7 +12,7 @@ use Request;
 class Playground extends Model
 {
     protected $table= 'playgrounds';
-    protected $fillable = ['name','details','address', 'user_id','image']; 
+    protected $fillable = ['name','details','address', 'user_id', 'cost','image']; 
 
     public function user() {
         return $this->belongsTo(User::class);
@@ -24,6 +25,10 @@ class Playground extends Model
     */
     public function slots() {
         return $this->belongsToMany(Slot::class, 'playground_slot','playground_id', 'slot_id');
+    }
+
+    public function reservations() {
+        return $this->hasMany(Reservation::class);
     }
 
 

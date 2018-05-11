@@ -15,10 +15,17 @@ class CreateReservationsTable extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->nullable();
             $table->integer('slot_id');
             $table->integer('playground_id');
-            $table->dateTime('date');
+            $table->integer('playground_cost');
+            $table->date('date');
+            /*
+            payment types (0, 1)
+            0   =>  manual
+            1   =>  online
+            */
+            $table->integer('payment_type')->default(0);
             $table->timestamps();
         });
     }

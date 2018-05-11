@@ -5,23 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
-// use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Hash;
 use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
 
 
 class AuthController extends Controller
 {
-     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
+
     /**
      * API Register
      *
@@ -30,21 +22,27 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $credentials = $request->only('name', 'email', 'password');
+        $credentials = $request->only('name', 'email', 'password','role_id','phone');
         $rules = [
             'name' => 'required|max:255|unique:users',
             'email' => 'required|email|max:255|unique:users',  
             'password' => 'required|min:6',
+            'phone' => 'required'
         ];
         $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
         }
+        
         $name = $request->name;
         $email = $request->email;
         $password = $request->password;
-        User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password)]);
-        return $this->login($request);
+        $role_id = $request->role_id;
+        $phone = $request->phone;
+        
+        $user = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password), 'role_id' => $role_id, 'phone' => $phone]);
+        JWTAuth::setToken('foo.bar.baz');
+        return response()->json(['success' => true, 'message'=> "Thanks for signing up, try to login with your credentials"]);
     }
 
     /**

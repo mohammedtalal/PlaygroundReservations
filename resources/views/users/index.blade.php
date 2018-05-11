@@ -31,7 +31,7 @@
 	            <td>{{ $user->name }}</td>
 	            <td>{{ $user->email }}</td>
 	            <td>{{ $user->phone }}</td>
-	            <td>{{ $user->role ? $user->role->name : '-'  }}</td>
+	            <td>{{ $user->role ? $user->role->name : 'Normal User'  }}</td>
 
 	            <td>
 	                

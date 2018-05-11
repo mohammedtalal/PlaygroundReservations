@@ -39,19 +39,11 @@ class PlaygroundController extends Controller
             'address' => 'required',
             'details' => 'required',
             'user_id' => 'required',
-            'image'    => 'image'
-
+            'cost'    => 'required|numeric'
         ]);
          if ($playground = Playground::create($request->all())) {
             $playground->uploadFile('image',$playground);
-            
-            // check if owner selected hours
-            if (isset($request->slots)) {
-                $playground->slots()->sync($request->slots);   
-            } else {
-                $playground->slots()->sync(array());
-            }
-            return redirect()->route('playgrounds.index')->with('success','Created Playground Successfully');
+            return redirect()->route('ownerPlaygrounds.index')->with('success','Created Playground Successfully');
         }
         return redirect()->back()->with('danger','Failed to save');
     }
@@ -69,19 +61,14 @@ class PlaygroundController extends Controller
             'address' => 'required',
             'details' => 'required',
             'user_id' => 'required',
+            'cost'    => 'required|numeric'
         ]);
 
         $playground = Playground::findOrFail($id);
 
          if ($playground->update($request->all())) {
             $playground->uploadFile('image',$playground);
-            
-            if (isset($request->slots)) {
-                $playground->slots()->sync($request->slots);   
-            } else {
-                $playground->slots()->sync(array());
-            }
-            return redirect()->back()->with('success','Updated Successfully');
+            return redirect()->route('ownerPlaygrounds.index')->with('success','Updated Successfully');
         }
         return redirect()->back()->with('danger','Failed to update');
     }   
@@ -92,33 +79,31 @@ class PlaygroundController extends Controller
         return redirect()->route('playgrounds.index')->with('danger','User deleted successfully');
     }
 
-    public function ownerPlaygrounds($id) {
-        $playgrounds = Playground::with('user')->where('user_id', $id)->get();
+    public function ownerPlaygrounds() {
+        $playgrounds = Playground::with('user')->where('user_id',auth()->id())->get();
         return view('playgrounds.show',compact('playgrounds'));
-    }
-
-    public function getChecks() {
-        $date = Input::get('date');
-        $myId = URl::current();
-        $playground = Playground::find(2);
-        $checkedSlots = $playground->slots()->wherePivot('date','=',$date)->get();
-        // $checkedSlots = Slot::has('playgrounds')->wherePivot('date','=',$date)->get();
-        // dd($checkedSlots);
-        $nonCheckedSlots = Slot::doesnthave('playgrounds')->get();
-        $allSlots = SLot::all();
-        return response()->json(['checkedSlots' => $checkedSlots, 'nonCheckedSlots' => $nonCheckedSlots, 'allSlots' => $allSlots]);
     }
 
     // create new playground schedule
     public function createPlaygroundSchedule($id) {
         $playground = Playground::findOrFail($id);
-        $slotsDosntHavePlayground = Slot::doesnthave('playgrounds')->get();
-        // $past = $playground->slots()->wherePivot('date','!=','2018-05-06')->get();
-        // dd($slotsDosntHavePlayground);
-        // $slots = Slot::all();
-        return view('playgrounds.schedule',compact('playground','slots', 'slotsDosntHavePlayground'));
+        return view('playgrounds.schedule',compact('playground'));
     }
 
+    public function getChecks($id) {
+        $date = Input::get('date'); // get date from  calendar input
+        $playgroundId = request()->route('id'); // get olaygroundId from current url 
+
+        $playground = Playground::find($playgroundId);
+        $checkedSlots = $playground->slots()->wherePivot('date','=',$date)->get();
+        
+        $slotsHasNotChecked = $checkedSlots->pluck('id'); // get others slots that not checked to comparing using it
+        // comparing between checked befor and nonChecked slots to fetch collection of not checkedbox's
+        $nonCheckedSlots = Slot::whereNotIn('id',$slotsHasNotChecked)->get(); 
+
+        $allSlots = SLot::all();
+        return response()->json(['checkedSlots' => $checkedSlots, 'nonCheckedSlots' => $nonCheckedSlots, 'allSlots' => $allSlots]);
+    }
     // store new playground slots (to pivot table)
     public function storePlaygroundSchedule(Request $request, $id) {
         $this->validate($request, [

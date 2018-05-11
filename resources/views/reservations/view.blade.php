@@ -1,8 +1,9 @@
+
 @extends('panel.index')
 
 @section('header')
- <h1>All Playgrounds</h1>
-<a href="{{route('ownerPlaygrounds.index')}}" class="btn btn-danger">
+ <h1>{{ ucfirst($playground->name) }} Reservations Details</h1>
+<a href="" class="btn btn-danger">
     <i class="fa fa-backward">Go Back</i> 
 </a>
 @stop
@@ -19,7 +20,7 @@
             <td width="75%" class="align-left">{{ $playground->address }}</td>
         </tr>
         <tr>
-            <td width="25%" class="align-left">Cost</td>
+            <td width="25%" class="align-left">Address</td>
             <td width="75%" class="align-left">{{ $playground->cost }}</td>
         </tr>
         <tr>
@@ -41,6 +42,23 @@
         <tr>
             <td width="25%" class="align-left">Owner phone</td>
             <td width="75%" class="align-left">{{ $playground->user->phone }}</td>
+        </tr>
+        <tr>
+            <td width="25%" class="align-left">Owner phone</td>
+            <td width="75%" class="align-left"> {{ $playground->user->phone }}</td>
+        </tr>
+        <tr>
+            <td width="25%" class="align-left">Reservation Times</td>
+            <td width="75%" class="align-left">
+            	<ul>
+	   
+                        @foreach($usersHasReserve as $slot)
+                                {{-- {{ dD($playground->slots) }} --}}
+						  <li class="col-md-6">{{ $slot->from ." ". $slot->to ." ". strtoupper($slot->status) }}</li>                
+                        @endforeach
+                
+				</ul>
+            </td>
         </tr>
     </table>
 </div>

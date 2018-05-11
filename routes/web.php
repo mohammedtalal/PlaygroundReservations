@@ -29,27 +29,33 @@ Route::group(['middleware' => 'auth:web'], function () {
 	/*==================== Playgrounds Routes ====================*/
 	Route::get('admin/PL','PlaygroundController@index')->name('playgrounds.index')->middleware('role:admin');
 	Route::get('admin/PL/{id}/view','PlaygroundController@view')->name('playgrounds.view');
-	Route::get('admin/PL/create','PlaygroundController@create')->name('playgrounds.create')->middleware('role:admin');
-	Route::post('admin/PL/store','PlaygroundController@store')->name('playgrounds.store')->middleware('role:admin');
+	Route::get('admin/PL/create','PlaygroundController@create')->name('playgrounds.create')->middleware('role:moder');
+	Route::post('admin/PL/store','PlaygroundController@store')->name('playgrounds.store')->middleware('role:moder');
 	Route::get('admin/PL/{id}/edit','PlaygroundController@edit')->name('playgrounds.edit');
 	Route::post('admin/PL/{id}/update','PlaygroundController@update')->name('playgrounds.update');
 	Route::delete('admin/PL/{id}/destroy','PlaygroundController@destroy')->name('playgrounds.destroy')->middleware('role:admin');
 
 	// get All owner playgrounds
-	Route::get('admin/{id}/PL','PlaygroundController@ownerPlaygrounds')->name('ownerPlaygrounds.index'); 
+	Route::get('admin/PLS','PlaygroundController@ownerPlaygrounds')->name('ownerPlaygrounds.index'); 
 	// get owner playground schedule view
 	Route::get('admin/PL/{id}/schedule/create','PlaygroundController@createPlaygroundSchedule')->name('playgroundSchedule.create'); 
 	Route::post('admin/PL/{id}/schedule/store','PlaygroundController@storePlaygroundSchedule')->name('playgroundSchedule.store'); 
+	// ajax get request to fetch slots based on date
+	Route::get('admin/PL/{id}', 'PlaygroundController@getChecks');
 
-Route::get('admin/pl', 'PlaygroundController@getChecks');
-	/*==================== Playground_Slots Routes ====================*/
-	Route::get('admin/schedules','SlotController@index')->name('playgroundSlot.index');
-	Route::get('admin/schedules/{id}/view','SlotController@view')->name('playgroundSlot.view');
-	Route::get('admin/schedules/create','SlotController@create')->name('playgroundSlot.create');
-	Route::post('admin/schedules/store','SlotController@store')->name('playgroundSlot.store');
-	Route::get('admin/schedules/{id}/edit','SlotController@edit')->name('playgroundSlot.edit');
-	Route::post('admin/schedules/{id}/update','SlotController@update')->name('playgroundSlot.update');
-	Route::delete('admin/schedules/{id}/destroy','SlotController@destroy')->name('playgroundSlot.destroy');
+	/*==================== Playground Reservations Routes ====================*/
+	Route::get('admin/reservations','ReservationController@index')->name('reservation.index');
+
+	Route::get('admin/reservation/create','ReservationController@create')->name('reservation.create');
+	Route::get('admin/cost/{id}','ReservationController@getCost'); //ajax to get playground cost based on choosing playground
+	Route::get('admin/available/{id}','ReservationController@getAvailableSlots'); //ajax to get available slots for playground
+	Route::post('admin/reservation/store','ReservationController@store')->name('reservation.store');
+	Route::get('admin/reservation/{id}/view','ReservationController@view')->name('reservation.view'); // show reservations details
+	 
+	
+	// Route::get('admin/reservation/{id}/edit','ReservationController@edit')->name('reservation.edit');
+	// Route::post('admin/reservation/{id}/update','ReservationController@update')->name('reservation.update');
+	// Route::delete('admin/reservation/{id}/destroy','ReservationController@destroy')->name('reservation.destroy');
 });
 /*================ End Dashboard Routes  ================*/
 
@@ -59,6 +65,8 @@ Route::get('admin/pl', 'PlaygroundController@getChecks');
 // Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
 
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', function(){
+	return redirect('/dashboard');
+});
 
 

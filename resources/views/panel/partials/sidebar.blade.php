@@ -7,7 +7,7 @@
           <img src="{{URL::asset('LTE/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p>{{ ucfirst(auth()->user()->name) }}</p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -47,7 +47,8 @@
 
             </ul>
           </li>
-
+          {{-- start else if --}}
+          @elseif(Auth::user()->hasRole('moder'))
           <!-- ============== Playground ========== -->
           <li class="treeview">
             <a href="#">
@@ -63,43 +64,38 @@
             </ul>
           </li>
 
-          <!-- ============== Slots ========== -->          
+        
+          <li class="treeview">
+            <a href="{{ route('ownerPlaygrounds.index') }}">
+              <i class="fa fa-laptop"></i> 
+              <span>My Playgrounds</span>
+            </a>
+          </li> 
+
           <li class="treeview">
             <a href="#">
               <i class="fa fa-laptop"></i>
-              <span>Playground Schedules</span>
+              <span>Reservations</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="{{ route('playgroundSlot.create') }}"><i class="fa fa-circle-o"></i>Create Schedule</a></li>
-              <li><a href="{{ route('playgroundSlot.index') }}"><i class="fa fa-circle-o"></i>All Schedules</a></li>
+              <li><a href="{{ route('reservation.create') }}"><i class="fa fa-circle-o"></i>New Reservation</a></li>
             </ul>
           </li>
-        @elseif(Auth::user()->hasRole('moder'))
-        {{-- {{ dd(Auth::user()->role->name) }} --}}
-          <li class="treeview">
-            <a href="{{ route('ownerPlaygrounds.index',auth()->id()) }}">
-              <i class="fa fa-laptop"></i>
-              <span>My Playgrounds</span>
-            </a>
-          </li> 
-          
         @endif
-
-
+        {{-- End if --}}
 
         <li>
-        <a href="{{ route('logout') }}"
-            onclick="event.preventDefault();
-                     document.getElementById('logout-form').submit();">
-            Logout
-        </a>
-
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-        </form>
+          <a href="{{ route('logout') }}"
+              onclick="event.preventDefault();
+                       document.getElementById('logout-form').submit();">
+              Logout
+          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              {{ csrf_field() }}
+          </form>
         </li>
    
     </section>

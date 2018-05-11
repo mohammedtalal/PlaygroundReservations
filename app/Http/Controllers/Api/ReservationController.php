@@ -1,13 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Api\BaseController as BaseController;
+use App\Http\Controllers\Controller;
 use App\Playground;
 use App\Reservation;
 use App\Slot;
+use App\User;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
-class ReservationController extends Controller
+class ReservationController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -16,16 +21,22 @@ class ReservationController extends Controller
      */
     public function index()
     {
-    	$playgrounds = Playground::with('user')->where('user_id',auth()->id())->paginate(10);
-        return view('reservations.index',compact('playgrounds'));
+        $playgrounds = Playground::with('user')->where('user_id',auth()->id())->paginate(10);
+        if (! empty($playgrounds)) {
+            return $this->sendResponse($playgrounds, 'Retrieved all reservations');
+        }
+        return $this->sendError('Data not found.');
     }
 
-    // stop this methood until know customer requirements
     public function view($id) {
         $playground = Playground::findOrFail($id);
 
-        $mm = $playground->slots()->pluck('slot_id');
-    	return view('reservations.view', compact('playground','usersHasReserve'));
+        // fetch reserved slots 
+        $reservedSlotsIds = $playground->reservations;
+        // fetch Un-Reserved slots 
+        $checkedSlots = $playground->slots()->wherePivot('slot_id','=',$reservedSlotsIds)->get();
+
+        return view('reservations.view', compact('playground','reservedSlotsIds'));
     }
 
     /**
@@ -35,14 +46,14 @@ class ReservationController extends Controller
      */
     public function create()
     {
-    	$playgrounds = Playground::with('user')->where('user_id',auth()->id())->get();
+        $playgrounds = Playground::with('user')->where('user_id',auth()->id())->get();
         return view('reservations.create', compact('playgrounds'));
     }
 
     public function getAvailableSlots($id) {
-    	$date = request('date'); // get date from  calendar input
+        $date = request('date'); // get date from  calendar input
         $playgroundId = request()->route('id'); // get playgroundId from current url 
-        
+
         $playground = Playground::find($playgroundId);
         // fetch reserved slots 
         $reservedSlotsIds = $playground->reservations->pluck('slot_id');
@@ -53,13 +64,6 @@ class ReservationController extends Controller
         return response()->json($checkedSlots);
     }
 
-    // ajax to trigger playground cost based on choosing playground 
-    public function getCost($id) {
-        $playgroundId = request()->route('id');
-        $playground = Playground::find($playgroundId);
-        return response()->json($playground);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -68,20 +72,32 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        // dD($request->all());
         $this->validate($request, [
             'playground_id' => 'required',
             'date' => 'required|after_or_equal:'.date("Y-m-d"),
             'slot_id' => 'required',
             'user_id' => 'nullable',
-            'payment_type' => 'required|integer',
-            'playground_cost' => 'required',
+            'payment_type' => 'required|integer'
         ]);
-        if ($reservation = Reservation::create($request->all())) {
-            return redirect()->back()->with('success','Reservation Done');
-        }
-        return redirect()->back()->with('danger','Reservation Failed');
+        $reservation = new Reservation;
+        $reservation->playground_id = $request->playground_id;
+        $reservation->date = $request->date;
+        $reservation->slot_id = $request->slot_id;
+        $reservation->user_id = $request->user_id;
+        $reservation->payment_type = $request->payment_type;
+
+       if ( $reservation->save()) {
+            return $this->sendResponse($reservation,'Reservation Done');
+       }
+            return $this->sendError('Reservation Failed');
+       
+
+        // if ( $reservation = Reservation::create($request->all())) {
+        //     return $this->sendResponse($reservation,'Reservation Done');
+        // };
+        //     return $this->sendError('Reservation Failed');
     }
+
 
     /**
      * Display the specified resource.

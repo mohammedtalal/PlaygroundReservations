@@ -14,7 +14,7 @@
 			  <h3 class="box-title">Update Playground</h3>
 			</div>
 			<div class="box-body">
-				<form class="form-horizontal" method="POST" action="{{ route('playgrounds.update',$playground->id) }}">
+				<form class="form-horizontal" method="POST" action="{{ route('playgrounds.update',$playground->id) }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
                         <div class="form-group">
@@ -39,6 +39,13 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="cost" class="col-md-4 control-label">Playground Cost</label>
+                            <div class="col-md-6">
+                                <input id="cost" type="number" class="form-control" name="cost" value="{{ $playground->cost }}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="user_id" class="col-md-4 control-label">Owner name</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="user_id" id="type">
@@ -57,15 +64,7 @@
                                 <input id="image" type="file" class="form-control" name="image" accept="image/*" >
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            @foreach($slots as $key => $slot)
-                                <div class="col-md-4">
-                                   <input type="checkbox" name="slots[]" {{ $playground->slots->contains($slot->id) ? 'checked' : '' }} value="{{ $slot->id }}">
-                                  <label class="form-check-label" for="defaultCheck"> {{ $slot->from ." : ".  $slot->to ." ". $slot->status }} </label>
-                                </div>
-                            @endforeach
-                        </div>
-
+                        
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">

@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Playground;
+use App\Reservation;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Slot extends Model
@@ -16,6 +18,18 @@ class Slot extends Model
     */
     public function playgrounds() {
         return $this->belongsToMany(Playground::class, 'playground_slot');
+    }
+
+
+    public function reservations() {
+        return $this->hasMany(Reservation::class);
+    }
+
+    /*
+        one hour(slot) can reserved by user
+    */
+    public function user() {
+        return $this->belongsTo(User::class);
     }
   
 }

@@ -18,6 +18,7 @@ class CreatePlaygroundTable extends Migration
             $table->string('name');
             $table->longText('details');
             $table->text('address');
+            $table->integer('cost');
             $table->text('image')->nullable();
 
             $table->integer('user_id')->unsigned();

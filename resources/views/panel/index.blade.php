@@ -75,7 +75,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
        {{ Html::script('plugins/chartjs/Chart.min.js') }}
-       {{ Html::script('LTE/js/pages/dashboard2.js') }}
+       {{-- {{ Html::script('LTE/js/pages/dashboard2.js') }} --}}
        {{ Html::script('LTE/js/demo.js') }}
   @show  
 
