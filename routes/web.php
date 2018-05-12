@@ -51,7 +51,22 @@ Route::group(['middleware' => 'auth:web'], function () {
 	Route::get('admin/available/{id}','ReservationController@getAvailableSlots'); //ajax to get available slots for playground
 	Route::post('admin/reservation/store','ReservationController@store')->name('reservation.store');
 	Route::get('admin/reservation/{id}/view','ReservationController@view')->name('reservation.view'); // show reservations details
-	 
+
+	 /*============================ Paypal routes =============================*/
+	Route::get('admin/reservation/online','ReservationController@getPaypal')->name('reservation.getPaypal');
+	Route::post('admin/reservation/paypal','ReservationController@postPaypal')->name('reservation.postPaypal');
+	Route::get('admin/reservation/status','ReservationController@getPaymentStatus')->name('reservation.status');
+	// Route::post('admin/reservation/paypal', function() {
+	// 	$playgroundId    = request('playground_id');
+ //        $playground_cost = request('playground_cost');
+ //        $payment_type    = request('payment_type');
+ //        $date            = request('date');
+ //        $slot_id         = request('slot_id');
+ //        $playground = Playground::find($playgroundId);
+ //        $slot = Slot::find($slot_id);
+
+ //        dd(basUr);
+	// })->name('reservation.postPaypal');
 	
 	// Route::get('admin/reservation/{id}/edit','ReservationController@edit')->name('reservation.edit');
 	// Route::post('admin/reservation/{id}/update','ReservationController@update')->name('reservation.update');

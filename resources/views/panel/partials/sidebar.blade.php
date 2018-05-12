@@ -64,13 +64,6 @@
             </ul>
           </li>
 
-        
-          <li class="treeview">
-            <a href="{{ route('ownerPlaygrounds.index') }}">
-              <i class="fa fa-laptop"></i> 
-              <span>My Playgrounds</span>
-            </a>
-          </li> 
 
           <li class="treeview">
             <a href="#">
@@ -81,7 +74,8 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="{{ route('reservation.create') }}"><i class="fa fa-circle-o"></i>New Reservation</a></li>
+              <li><a href="{{ route('reservation.create') }}"><i class="fa fa-circle-o"></i>Manual Reservation</a></li>
+              <li><a href="{{ route('reservation.getPaypal') }}"><i class="fa fa-circle-o"></i>Online Reservation</a></li>
             </ul>
           </li>
         @endif

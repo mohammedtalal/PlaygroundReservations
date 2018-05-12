@@ -1,10 +1,10 @@
 @extends('panel.index')
 @section('header')
- <h1>New Manual Reservation</h1>
+ <h1>New Reservation</h1>
 @stop
 @section('contents')
     <div class="col-md-12">
-		<form method="POST" action="{{ route('reservation.store') }}">
+		<form method="POST" action="{{ route('reservation.postPaypal') }}">
 			{{ csrf_field() }}
 
 			{{-- left div --}}
@@ -25,7 +25,7 @@
 				</div>
 
 				<div class="form-group">
-			    	<input class="form-control" type="hidden" name="payment_type" id="payment_type" value="0">
+			    	<input class="form-control" type="hidden" name="payment_type" id="payment_type" value="1">
 		    	</div>
 				
 				<div class="form-group">	

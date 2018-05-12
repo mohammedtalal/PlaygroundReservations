@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    protected $fillable = ['user_id','slot_id','playground_id','date','playground_cost'];
+    protected $fillable = ['user_id','slot_id','playground_id','date','playground_cost','payment_type'];
 
     public function users(){
         return $this->belongsTo(User::class);

@@ -25,7 +25,7 @@ class CreateReservationsTable extends Migration
             0   =>  manual
             1   =>  online
             */
-            $table->integer('payment_type')->default(0);
+            $table->string('payment_type');
             $table->timestamps();
         });
     }

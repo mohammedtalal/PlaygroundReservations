@@ -14,7 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         {{ Html::style('css/app.css')}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-        {{ Html::style('plugins/jvectormap/jquery-jvectormap-1.2.2.css')}}
+        {{-- {{ Html::style('plugins/jvectormap/jquery-jvectormap-1.2.2.css')}} --}}
 
         @yield('extra-style')
 
@@ -64,17 +64,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED JS SCRIPTS -->
 
 @section('script')
-       {{ Html::script('plugins/jQuery/jquery-2.2.3.min.js') }}
+       {{-- {{ Html::script('plugins/jQuery/jquery-2.2.3.min.js') }} --}}
        {{ Html::script('js/app.js') }}
-       {{ Html::script('plugins/fastclick/fastclick.js') }}
+       {{-- {{ Html::script('plugins/fastclick/fastclick.js') }} --}}
        {{ Html::script('LTE/js/app.min.js') }}
-       {{ Html::script('plugins/sparkline/jquery.sparkline.min.js') }}
-       {{ Html::script('plugins/jvectormap/jquery-jvectormap-1.2.2.min.js') }}
-       {{ Html::script('plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }}
-       {{ Html::script('plugins/slimScroll/jquery.slimscroll.min.js') }}
+       {{-- {{ Html::script('plugins/sparkline/jquery.sparkline.min.js') }} --}}
+       {{-- {{ Html::script('plugins/jvectormap/jquery-jvectormap-1.2.2.min.js') }} --}}
+       {{-- {{ Html::script('plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }} --}}
+       {{-- {{ Html::script('plugins/slimScroll/jquery.slimscroll.min.js') }} --}}
 
        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-       {{ Html::script('plugins/chartjs/Chart.min.js') }}
+       {{-- {{ Html::script('plugins/chartjs/Chart.min.js') }} --}}
        {{-- {{ Html::script('LTE/js/pages/dashboard2.js') }} --}}
        {{ Html::script('LTE/js/demo.js') }}
   @show  

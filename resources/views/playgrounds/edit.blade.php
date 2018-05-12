@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="cost" class="col-md-4 control-label">Playground Cost</label>
+                            <label for="cost" class="col-md-4 control-label">Playground Hour Cost</label>
                             <div class="col-md-6">
                                 <input id="cost" type="number" class="form-control" name="cost" value="{{ $playground->cost }}" required>
                             </div>
