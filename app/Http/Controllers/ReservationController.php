@@ -26,7 +26,6 @@ use PayPal\Rest\ApiContext;
 
 class ReservationController extends Controller
 {
-
     private $_api_context;
     private $rules;
     public function __construct() {
@@ -39,7 +38,6 @@ class ReservationController extends Controller
             'payment_type' => 'required|min:0|max:1',
             'playground_cost' => 'required'
         ];
-
          /** PayPal api context **/
         $paypal_conf = \Config::get('paypal');
         $this->_api_context = new ApiContext(new OAuthTokenCredential(
@@ -48,50 +46,48 @@ class ReservationController extends Controller
         );
         $this->_api_context->setConfig($paypal_conf['settings']);
     }
-
     public function getPaypal() {
         $playgrounds = Playground::with('user')->where('user_id',auth()->id())->get();
         return view('reservations.paypal', compact('playgrounds'));
     }
-
     public function postPaypal(Request $request) {
         $this->validate($request,$this->rules);
-        $playgroundId    = $request->playground_id;
-        $playground_cost = $request->playground_cost;
-        $payment_type    = $request->payment_type;
-        $date            = $request->date;
-        $slot_id         = $request->slot_id;
-        $playground = Playground::find($playgroundId);
-        $slot = Slot::find($slot_id);
+        \Session::put('object',$request->all());
+
+        $playground = Playground::find($request->playground_id);
+        $slot = Slot::find($request->slot_id);
 
          // set payer
         $payer = new Payer();
         $payer->setPaymentMethod("paypal");
+
         // items
         $item1 = new Item();
         $item1->setName($playground->name)
             ->setCurrency('USD')
             ->setQuantity(1)
-            ->setDescription('Reservation playground from '.$slot->from.' to '.$slot->to)
-            ->setPrice($playground_cost);
+            ->setDescription('Reservation ' . ucfirst($playground->name) . 'from '.$slot->from.' to '.$slot->to. ucfirst($slot->status))
+            ->setPrice($playground->cost);
+
         // item list
         $itemList = new ItemList();
         $itemList->setItems(array($item1));
+
         // amount
         $amount = new Amount();
         $amount->setCurrency("USD")
-            ->setTotal($playground_cost);
+            ->setTotal($playground->cost);
 
         // Transactions
         $transaction = new Transaction();
         $transaction->setAmount($amount)
             ->setItemList($itemList)
-            ->setDescription("Reservation playground hour from ".$slot->from." to ".$slot->to);
+            ->setDescription('Reservation ' . ucfirst($playground->name) . ' playground hour from '.$slot->from.' to '.$slot->to . ucfirst($slot->status));
 
         // redirect url 
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(URL::to('status'))
-            ->setCancelUrl(URL::to('status'));
+        $redirectUrls->setReturnUrl(route('reservation.status'))
+            ->setCancelUrl(route('reservation.status'));
 
         // Payment
         $payment = new Payment();
@@ -104,8 +100,6 @@ class ReservationController extends Controller
 
         try {
             $payment->create($this->_api_context);
-            // $reservation = Reservation::create($request->all());
-
         } catch (\PayPal\Exception\PPConnectionException $ex) {
             if (\Config::get('app.debug')) {
                 \Session::put('error', 'Connection timeout');
@@ -115,31 +109,29 @@ class ReservationController extends Controller
                 return redirect()->route('reservation.postPaypal');
             } //end else
         } //end catch
-
         foreach ($payment->getLinks() as $link) {
             if ($link->getRel() == 'approval_url') {
                 $redirect_url = $link->getHref();
                 break;
             }
         } //end foreach
-
         \Session::put('paypal_payment_id', $payment->getId());
         if (isset($redirect_url)) {
-            // dd($redirect_url);
-            // return redirect($redirect_url);
+            return response()->json(['settings'  => $payment, 'approval link'    => $redirect_url]);
             return Redirect::away($redirect_url);
         } 
         \Session::put('error', 'Unknown error occurred');
             return Redirect::route('reservation.postPaypal');
-
     } //end postPaypaly function
 
-    public function getPaymentStatus()
-    {
+    public function getPaymentStatus() {
+        
         /** Get the payment ID before session clear **/
         $payment_id = Session::get('paypal_payment_id');
+
         /** clear the session payment ID **/
         \Session::forget('paypal_payment_id');
+
         if (empty(request('PayerID')) || empty(request('token'))) {
             \Session::put('error', 'Payment failed');
                 return redirect()->route('reservation.getPaypal')->with('danger','Payment failed');
@@ -147,15 +139,17 @@ class ReservationController extends Controller
         $payment = Payment::get($payment_id, $this->_api_context);
         $execution = new PaymentExecution();
         $execution->setPayerId(request('PayerID'));
+        
         /**Execute the payment **/
         $result = $payment->execute($execution, $this->_api_context);
         if ($result->getState() == 'approved') {
-        \Session::put('success', 'Payment success');
+            \Session::put('success', 'Payment success');
                 return redirect()->route('reservation.getPaypal')->with('success','Payment Success');
         }
-        \Session::put('error', 'Payment failed');
+            \Session::put('error', 'Payment failed');
                 return redirect()->route('reservation.getPaypal')->with('danger','Payment failed');
     }
+
 
 
 

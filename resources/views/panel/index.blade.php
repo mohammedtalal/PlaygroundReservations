@@ -64,7 +64,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED JS SCRIPTS -->
 
 @section('script')
-       {{-- {{ Html::script('plugins/jQuery/jquery-2.2.3.min.js') }} --}}
+       {{ Html::script('plugins/jQuery/jquery-2.2.3.min.js') }}
+       
        {{ Html::script('js/app.js') }}
        {{-- {{ Html::script('plugins/fastclick/fastclick.js') }} --}}
        {{ Html::script('LTE/js/app.min.js') }}

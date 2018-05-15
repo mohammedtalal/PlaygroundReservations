@@ -86,7 +86,7 @@ class ReservationController extends BaseController
         $reservation->user_id = $request->user_id;
         $reservation->payment_type = $request->payment_type;
 
-       if ( $reservation->save()) {
+       if ($reservation->save()) {
             return $this->sendResponse($reservation,'Reservation Done');
        }
             return $this->sendError('Reservation Failed');

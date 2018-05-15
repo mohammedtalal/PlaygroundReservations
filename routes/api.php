@@ -37,9 +37,11 @@ Route::group(['middleware' => ['jwt.auth']], function() {
 	Route::post('playground/{id}/available','Api\NormalUserController@available')->middleware('role:user'); // post requet date
 	Route::post('playground/{id}/reserve','Api\NormalUserController@reserve')->name('playground.reserve')->middleware('role:user');
 
+
+	/*============================  Normal User Reservation Paypal routes =============================*/
+	// Route::get('reservation/online','ReservationController@getPaypal')->name('reservation.getPaypal');
+	// Route::post('admin/reservation/paypal','ReservationController@postPaypal')->name('reservation.postPaypal');
+	// Route::get('admin/reservation/status','ReservationController@getPaymentStatus')->name('reservation.status');
+	/*============================= End Paypal routes ===========================*/
+
 });
-// user
-// 1- showing all playgrounds
-// 2- view specific playground
-// 3- show available hours for specific playgroun
-// 4- reserve hour 
