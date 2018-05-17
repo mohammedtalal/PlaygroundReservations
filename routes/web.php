@@ -3,6 +3,7 @@
 use App\Playground;
 use App\PlaygroundSlot;
 use App\Slot;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\Input;
 
 Route::Auth();
 Auth::routes();
+
+Route::get('test', function(){
+});
 
 /*================ Start Dashboard Routes  ================*/
 Route::group(['middleware' => 'auth:web'], function () {

@@ -12,10 +12,7 @@ Route::post('register', 'Api\AuthController@register');
  
 Route::group(['middleware' => ['jwt.auth']], function() {
 	Route::get('playgrounds','Api\PlaygroundController@index');
-	/*
-		id 	=> user id
 
-	 */
 	Route::get('{id}/playgrounds','Api\PlaygroundController@show');
 	Route::get('token','Api\PlaygroundController@token');
     Route::get('logout', 'Api\AuthController@logout');
@@ -32,10 +29,13 @@ Route::group(['middleware' => ['jwt.auth']], function() {
 
 
 	/* ==================== normal user routes ==========================*/
-	Route::get('playgrounds','Api\NormalUserController@index')->middleware('role:user');
-	Route::get('playground/{id}','Api\NormalUserController@view')->middleware('role:user');
-	Route::post('playground/{id}/available','Api\NormalUserController@available')->middleware('role:user'); // post requet date
-	Route::post('playground/{id}/reserve','Api\NormalUserController@reserve')->name('playground.reserve')->middleware('role:user');
+	Route::get('user/PLS','Api\NormalUserController@index')->middleware('role:user');
+	Route::post('user/PL','Api\NormalUserController@view')->name('playground.view')->middleware('role:user'); // send PL(id)to show PL details
+	Route::post('user/PL/available','Api\NormalUserController@available')->middleware('role:user'); // post requet (id,date)
+	Route::post('user/PL/reserve','Api\NormalUserController@reserve')->name('playground.reserve')->middleware('role:user'); // reserve manual
+
+	Route::post('user/PL/paypal','Api\NormalUserController@postPaypal')->name('user.postPaypal'); // reserve using paypal
+
 
 
 	/*============================  Normal User Reservation Paypal routes =============================*/
@@ -45,3 +45,6 @@ Route::group(['middleware' => ['jwt.auth']], function() {
 	/*============================= End Paypal routes ===========================*/
 
 });
+	Route::get('user/PL/success','Api\NormalUserController@success')->name('user.success');
+	Route::get('user/PL/fail','Api\NormalUserController@fail')->name('user.fail');
+	

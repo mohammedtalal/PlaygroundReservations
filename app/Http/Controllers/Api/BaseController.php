@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use App\Playground;
+use Illuminate\Http\Request;
 
 
 class BaseController extends Controller
 {
-
 
     public function sendResponse($result=[], $message=[], $slots=[])
     {
@@ -37,5 +37,17 @@ class BaseController extends Controller
 
 
         return response()->json($response, $code);
+    }
+
+
+    public function playgroundTransform(Playground $playground){
+        return [
+            'name'      => $playground->name,
+            'details'   => $playground->details,
+            'address'   => $playground->address,
+            'cost'      => $playground->cost,
+            'image'      => $playground->image,
+            'user_id'      => $playground->user_id,
+        ];
     }
 }

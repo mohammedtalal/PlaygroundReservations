@@ -60,7 +60,7 @@
             </a>
             <ul class="treeview-menu">
               <li><a href="{{ route('playgrounds.create')}}"><i class="fa fa-circle-o"></i>Create New Playground</a></li>
-              <li><a href="{{ route('playgrounds.index') }}"><i class="fa fa-circle-o"></i>All Playgrounds</a></li>
+              <li><a href="{{ route('ownerPlaygrounds.index') }}"><i class="fa fa-circle-o"></i>All Playgrounds</a></li>
             </ul>
           </li>
 

@@ -50,6 +50,9 @@ class User extends Authenticatable
         return $this->hasMany(Slot::class);
     }
 
+    public function link(){
+        return 'hello';
+    }
     public function hasRole($role)
     {
       return null !== $this->role()->where('name', $role)->first();

@@ -17,7 +17,7 @@ class Playground extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
-
+    
     /**
      * ManyToMany relation
      * between Slot and Playground

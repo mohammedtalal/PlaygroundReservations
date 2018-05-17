@@ -26,7 +26,7 @@ use PayPal\Rest\ApiContext;
 
 class ReservationController extends Controller
 {
-    private $_api_context;
+    private $api_context;
     private $rules;
     public function __construct() {
         // rules
@@ -40,11 +40,11 @@ class ReservationController extends Controller
         ];
          /** PayPal api context **/
         $paypal_conf = \Config::get('paypal');
-        $this->_api_context = new ApiContext(new OAuthTokenCredential(
+        $this->api_context = new ApiContext(new OAuthTokenCredential(
             $paypal_conf['client_id'],
             $paypal_conf['secret'])
         );
-        $this->_api_context->setConfig($paypal_conf['settings']);
+        $this->api_context->setConfig($paypal_conf['settings']);
     }
     public function getPaypal() {
         $playgrounds = Playground::with('user')->where('user_id',auth()->id())->get();
@@ -52,7 +52,6 @@ class ReservationController extends Controller
     }
     public function postPaypal(Request $request) {
         $this->validate($request,$this->rules);
-        \Session::put('object',$request->all());
 
         $playground = Playground::find($request->playground_id);
         $slot = Slot::find($request->slot_id);
@@ -99,7 +98,7 @@ class ReservationController extends Controller
         $request = clone $payment;
 
         try {
-            $payment->create($this->_api_context);
+            $payment->create($this->api_context);
         } catch (\PayPal\Exception\PPConnectionException $ex) {
             if (\Config::get('app.debug')) {
                 \Session::put('error', 'Connection timeout');
@@ -117,12 +116,12 @@ class ReservationController extends Controller
         } //end foreach
         \Session::put('paypal_payment_id', $payment->getId());
         if (isset($redirect_url)) {
-            return response()->json(['settings'  => $payment, 'approval link'    => $redirect_url]);
+            // return response()->json(['settings'  => $payment, 'approval link'    => $redirect_url]);
             return Redirect::away($redirect_url);
         } 
         \Session::put('error', 'Unknown error occurred');
             return Redirect::route('reservation.postPaypal');
-    } //end postPaypaly function
+    } //end postPaypaly
 
     public function getPaymentStatus() {
         
@@ -136,19 +135,19 @@ class ReservationController extends Controller
             \Session::put('error', 'Payment failed');
                 return redirect()->route('reservation.getPaypal')->with('danger','Payment failed');
         }
-        $payment = Payment::get($payment_id, $this->_api_context);
+        $payment = Payment::get($payment_id, $this->api_context);
         $execution = new PaymentExecution();
         $execution->setPayerId(request('PayerID'));
         
         /**Execute the payment **/
-        $result = $payment->execute($execution, $this->_api_context);
+        $result = $payment->execute($execution, $this->api_context);
         if ($result->getState() == 'approved') {
             \Session::put('success', 'Payment success');
                 return redirect()->route('reservation.getPaypal')->with('success','Payment Success');
         }
             \Session::put('error', 'Payment failed');
                 return redirect()->route('reservation.getPaypal')->with('danger','Payment failed');
-    }
+    } //wnd getPaymentStatus
 
 
 
