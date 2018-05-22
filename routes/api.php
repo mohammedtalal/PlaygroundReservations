@@ -36,14 +36,6 @@ Route::group(['middleware' => ['jwt.auth']], function() {
 
 	Route::post('user/PL/paypal','Api\NormalUserController@postPaypal')->name('user.postPaypal'); // reserve using paypal
 
-
-
-	/*============================  Normal User Reservation Paypal routes =============================*/
-	// Route::get('reservation/online','ReservationController@getPaypal')->name('reservation.getPaypal');
-	// Route::post('admin/reservation/paypal','ReservationController@postPaypal')->name('reservation.postPaypal');
-	// Route::get('admin/reservation/status','ReservationController@getPaymentStatus')->name('reservation.status');
-	/*============================= End Paypal routes ===========================*/
-
 });
 	Route::get('user/PL/success','Api\NormalUserController@success')->name('user.success');
 	Route::get('user/PL/fail','Api\NormalUserController@fail')->name('user.fail');

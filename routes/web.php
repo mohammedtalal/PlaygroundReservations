@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Input;
 
 Route::Auth();
 Auth::routes();
-
-Route::get('test', function(){
+Route::get('api-doc', function() {
+	return view('api-doc');
 });
 
 /*================ Start Dashboard Routes  ================*/
@@ -33,8 +33,8 @@ Route::group(['middleware' => 'auth:web'], function () {
 	/*==================== Playgrounds Routes ====================*/
 	Route::get('admin/PL','PlaygroundController@index')->name('playgrounds.index')->middleware('role:admin');
 	Route::get('admin/PL/{id}/view','PlaygroundController@view')->name('playgrounds.view');
-	Route::get('admin/PL/create','PlaygroundController@create')->name('playgrounds.create')->middleware('role:moder');
-	Route::post('admin/PL/store','PlaygroundController@store')->name('playgrounds.store')->middleware('role:moder');
+	Route::get('admin/PL/create','PlaygroundController@create')->name('playgrounds.create')->middleware('role:owner');
+	Route::post('admin/PL/store','PlaygroundController@store')->name('playgrounds.store')->middleware('role:owner');
 	Route::get('admin/PL/{id}/edit','PlaygroundController@edit')->name('playgrounds.edit');
 	Route::post('admin/PL/{id}/update','PlaygroundController@update')->name('playgrounds.update');
 	Route::delete('admin/PL/{id}/destroy','PlaygroundController@destroy')->name('playgrounds.destroy')->middleware('role:admin');

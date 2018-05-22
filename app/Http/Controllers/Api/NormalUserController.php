@@ -167,6 +167,7 @@ class NormalUserController extends BaseController
 
         try {
             $payment->create($this->api_context);
+
             // return $payment;
         } catch (\PayPal\Exception\PPConnectionException $ex) {
             if (\Config::get('app.debug')) {
@@ -175,12 +176,17 @@ class NormalUserController extends BaseController
             } else {
                 \Session::put('error', 'Some error occur, sorry for inconvenient');
                 return $this->sendError('Some error occur, sorry for inconvenient');
-
-                // return redirect()->route('reservation.postPaypal');
             } //end else
         } //end catch
 
         \Session::put('paypal_payment_id', $payment->getId());
+
+         // set form data on session (reservation data)
+             $data = request()->all();
+             $data['user_id'] = auth()->id();
+            \Session(['reservation_data' => $data]);
+
+
         if (isset($payment)) {
             return response()->json(['result' => $payment->toArray(), 'approval link'    => $payment->getApprovalLink()]);
         } 
@@ -190,9 +196,17 @@ class NormalUserController extends BaseController
 
 
     public function success() {
+
         if (empty(Input::get('PayerID')) || empty(Input::get('token'))) {
             return response()->json('Payment Fail');
         }
+
+        /** Get reservation data] befor session clear */
+        $reservation_data = \Session::get('reservation_data');
+        /** clear the session Reservation data **/
+        \Session::forget('reservation_data');
+
+
         $paymentId = Input::get('paymentId');
         $payment = Payment::get($paymentId,$this->api_context); 
         $execution = new PaymentExecution();
@@ -200,6 +214,8 @@ class NormalUserController extends BaseController
         $result = $payment->execute($execution, $this->api_context);
 
         if ($result->getState() == 'approved') {
+            /** store reservation data into DB   */
+            Reservation::create($reservation_data);
             return response()->json(["status"  => true, "message" => "Payment Success and Playground reserved done"]);
         }
             return response()->json('Payment Fail');

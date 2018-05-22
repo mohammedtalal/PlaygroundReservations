@@ -30,8 +30,8 @@ class UsersSeeder extends Seeder
                     1 =>
                     array(
                         'id' => 2,
-                        'name' => 'moder',
-                        'email' => 'moder@moder.com',
+                        'name' => 'owner',
+                        'email' => 'owner@owner.com',
                         'password' => bcrypt(123456),
                         'phone' => 01110000000,
                         'role_id' => 2,

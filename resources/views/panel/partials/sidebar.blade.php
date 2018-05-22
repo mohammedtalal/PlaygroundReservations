@@ -48,7 +48,7 @@
             </ul>
           </li>
           {{-- start else if --}}
-          @elseif(Auth::user()->hasRole('moder'))
+          @elseif(Auth::user()->hasRole('owner'))
           <!-- ============== Playground ========== -->
           <li class="treeview">
             <a href="#">

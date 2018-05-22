@@ -8,6 +8,7 @@ use App\Playground;
 use App\Reservation;
 use App\Slot;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -58,9 +59,14 @@ class ReservationController extends BaseController
         // fetch reserved slots 
         $reservedSlotsIds = $playground->reservations->pluck('slot_id');
 
-        // fetch Un-Reserved slots 
-        $checkedSlots = $playground->slots()->wherePivot('date','=',$date)->whereNotIn('slot_id',$reservedSlotsIds)->get();
-
+        $dateTime = Carbon::now();
+        $currentTime = $dateTime->format('g:i a');
+        
+        // fetch Un-Reserved slots where current time less than max time of each slot
+        $checkedSlots = $playground->slots()->wherePivot('date','=',$date)
+                ->whereNotIn('slot_id',$reservedSlotsIds)
+                ->where('max_time','>',$currentTime)
+                ->get();
         return response()->json($checkedSlots);
     }
 
@@ -90,57 +96,5 @@ class ReservationController extends BaseController
             return $this->sendResponse($reservation,'Reservation Done');
        }
             return $this->sendError('Reservation Failed');
-       
-
-        // if ( $reservation = Reservation::create($request->all())) {
-        //     return $this->sendResponse($reservation,'Reservation Done');
-        // };
-        //     return $this->sendError('Reservation Failed');
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -13,10 +13,7 @@ use Illuminate\Support\Facades\URL;
 
 class PlaygroundController extends Controller
 {
-    protected $model;
-    public function __construct(Playground $model) {
-        $this->model = $model;
-    }
+    
     public function index() {
         $playgrounds = Playground::with('user')->paginate(10);
     	return view('playgrounds.index',compact('playgrounds'));
@@ -104,6 +101,7 @@ class PlaygroundController extends Controller
         $allSlots = SLot::all();
         return response()->json(['checkedSlots' => $checkedSlots, 'nonCheckedSlots' => $nonCheckedSlots, 'allSlots' => $allSlots]);
     }
+    
     // store new playground slots (to pivot table)
     public function storePlaygroundSchedule(Request $request, $id) {
         $this->validate($request, [
@@ -113,7 +111,7 @@ class PlaygroundController extends Controller
         $playground = Playground::findOrFail($id);
         
         if (isset($request->slots)) {
-            $playground->slots()->detach($request->slots,['date' => $request->date]);
+            $playground->slots()->detach($playground->slots->pluck('id')->toArray(),['date' => $request->date]);
             $playground->slots()->attach($request->slots,['date' => $request->date]);
         } else {
             $playground->slots()->sync(array());

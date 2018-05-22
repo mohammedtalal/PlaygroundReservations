@@ -26,7 +26,7 @@ class RolesSeeder extends Seeder
                     1 =>
                     array(
                         'id' => 2,
-                        'name' => 'moder',
+                        'name' => 'owner',
                         'created_at' => '2017-05-22 12:07:12',
                         'updated_at' => '2017-05-22 12:07:12',
                     ),

@@ -42,7 +42,9 @@ $(document).ready(function () {
 			// check if has any slots in DB based on Date to retrieve it
 			if (data.checkedSlots !== 'undefined' && data.nonCheckedSlots !== 'undefined') {
 				$.each(data.checkedSlots, function(index,slotObj){
+					// $("#hour option:checked").removeAttr("checked");
 					$('#slots').append('<li class="col-md-4"><input class="form-check-input" type="checkbox" name="slots[]"               value="'+slotObj.id+'" checked/> <label class="form-check-label" id="mm" for="defaultCheck"> '+slotObj.from+ " : " +  slotObj.to + " "+ slotObj.status+' </label> </li>');
+					// $('#hour').prop('checked', false);
 				});
 				$.each(data.nonCheckedSlots, function(index,slotObj){
 					$('#slots').append('<li class="col-md-4"><input class="form-check-input" type="checkbox" name="slots[]"               value="'+slotObj.id+'" /> <label class="form-check-label" id="mm" for="defaultCheck"> '+slotObj.from+ " : " +  slotObj.to + " "+ slotObj.status+' </label> </li>');
@@ -51,8 +53,9 @@ $(document).ready(function () {
 				$.each(data.allSlots, function(index,slotObj){
 					$('#slots').append('<li class="col-md-4"><input class="form-check-input" type="checkbox" name="slots[]"               value="'+slotObj.id+'" /> <label class="form-check-label" id="mm" for="defaultCheck"> '+slotObj.from+ " : " +  slotObj.to + " "+ slotObj.status+' </label> </li>');
 				});
-			}
+			} 
 		});
+
 	});
 });
 </script>

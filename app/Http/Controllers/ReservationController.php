@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Playground;
 use App\Reservation;
 use App\Slot;
+use Carbon\Carbon;
+use Faker\Provider\DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -51,7 +53,6 @@ class ReservationController extends Controller
         return view('reservations.paypal', compact('playgrounds'));
     }
     public function postPaypal(Request $request) {
-        $this->validate($request,$this->rules);
 
         $playground = Playground::find($request->playground_id);
         $slot = Slot::find($request->slot_id);
@@ -115,16 +116,25 @@ class ReservationController extends Controller
             }
         } //end foreach
         \Session::put('paypal_payment_id', $payment->getId());
+
+        // set form valid data on session (reservation data)
+        $this->validate(request(), $this->rules);
+        \Session(['reservation_data' => request()->all()]);
+
         if (isset($redirect_url)) {
-            // return response()->json(['settings'  => $payment, 'approval link'    => $redirect_url]);
             return Redirect::away($redirect_url);
         } 
         \Session::put('error', 'Unknown error occurred');
             return Redirect::route('reservation.postPaypal');
-    } //end postPaypaly
+    } //end postPaypal
 
     public function getPaymentStatus() {
-        
+        /** Get reservation data] befor session clear */
+        $reservation_data = Session::get('reservation_data');
+
+        /** clear the session Reservation data **/
+        \Session::forget('reservation_data');
+
         /** Get the payment ID before session clear **/
         $payment_id = Session::get('paypal_payment_id');
 
@@ -139,18 +149,18 @@ class ReservationController extends Controller
         $execution = new PaymentExecution();
         $execution->setPayerId(request('PayerID'));
         
+
         /**Execute the payment **/
         $result = $payment->execute($execution, $this->api_context);
         if ($result->getState() == 'approved') {
+            /** store reservation data into DB   */
+            Reservation::create($reservation_data);
             \Session::put('success', 'Payment success');
                 return redirect()->route('reservation.getPaypal')->with('success','Payment Success');
         }
             \Session::put('error', 'Payment failed');
                 return redirect()->route('reservation.getPaypal')->with('danger','Payment failed');
-    } //wnd getPaymentStatus
-
-
-
+    } //end getPaymentStatus
 
 
     /**
@@ -186,13 +196,19 @@ class ReservationController extends Controller
     public function getAvailableSlots($id) {
     	$date = request('date'); // get date from  calendar input
         $playgroundId = request()->route('id'); // get playgroundId from current url 
-        
+
         $playground = Playground::find($playgroundId);
         // fetch reserved slots 
         $reservedSlotsIds = $playground->reservations->pluck('slot_id');
 
-        // fetch Un-Reserved slots 
-        $checkedSlots = $playground->slots()->wherePivot('date','=',$date)->whereNotIn('slot_id',$reservedSlotsIds)->get();
+        $dateTime = Carbon::now();
+        $currentTime = $dateTime->format('g:i a');
+
+        // fetch Un-Reserved slots where current time less than max time of each slot
+        $checkedSlots = $playground->slots()->wherePivot('date','=',$date)
+                ->whereNotIn('slot_id',$reservedSlotsIds)
+                ->where('max_time','>',$currentTime)
+                ->get();
 
         return response()->json($checkedSlots);
     }
