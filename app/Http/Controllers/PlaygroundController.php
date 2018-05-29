@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Playground;
 use App\PlaygroundSlot;
+use App\Reservation;
 use App\Slot;
 use App\User;
 use File;
@@ -62,7 +63,6 @@ class PlaygroundController extends Controller
         ]);
 
         $playground = Playground::findOrFail($id);
-
          if ($playground->update($request->all())) {
             $playground->uploadFile('image',$playground);
             return redirect()->route('ownerPlaygrounds.index')->with('success','Updated Successfully');
@@ -117,5 +117,21 @@ class PlaygroundController extends Controller
             $playground->slots()->sync(array());
         }
         return redirect()->route('ownerPlaygrounds.index',$playground->id)->with('success','process success');
+    }
+
+    public function playgroundRreservedHours($id) {
+        $playground = Playground::findOrFail($id);
+        $reservations = Reservation::with('users','playground','slots')
+            ->where('playground_id',$playground->id)
+            ->where('date', '>=', date('Y-m-d'))
+            ->orderBy('date','desc')
+            ->paginate(10);
+        return view('playgrounds.reservedTimes',compact('reservations'));
+    }
+
+    /* ajax get request to get reserved hours based on date */
+    public function getReservedHours() {
+        $date = Input::get('date'); // get date from  calendar input
+        
     }
 }

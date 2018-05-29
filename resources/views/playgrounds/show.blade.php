@@ -17,11 +17,10 @@
             <th>Hour Cost</th>
             <th>Owner name</th>
             <th>Owner phone</th>
-            <th colspan="3">Action</th>
+            <th colspan="3" style="padding-left: 85px">Action</th>
         </thead>
+
         <tbody>
-        
-       <!-- foreach -->
        @foreach($playgrounds as $key => $playground)
             <tr>
                 <td>{{ ++$key }}</td>
@@ -33,7 +32,6 @@
 
                 <td>
                    <div class='btn btn-group'>
-                        
                         <a href="{{ route('playgrounds.edit',$playground->id) }}" class='btn btn-info btn-xs'>
                             <span>Edit</span>
                         </a>
@@ -42,6 +40,9 @@
                         </a>
                         <a href="{{ route('playgroundSchedule.create',$playground->id) }}" class='btn btn-primary btn-xs'>
                             <span>Schedule</span>
+                        </a>
+                        <a href="{{ route('playground.reserved',$playground->id) }}" class='btn btn-primary btn-xs'>
+                            <span>Reservations</span>
                         </a>
                     </div>
                 </td>

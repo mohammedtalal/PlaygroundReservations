@@ -68,14 +68,15 @@
           <li class="treeview">
             <a href="#">
               <i class="fa fa-laptop"></i>
-              <span>Reservations</span>
+              <span>Booking Now</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="{{ route('reservation.create') }}"><i class="fa fa-circle-o"></i>Manual Reservation</a></li>
-              <li><a href="{{ route('reservation.getPaypal') }}"><i class="fa fa-circle-o"></i>Online Reservation</a></li>
+              <li><a href="{{ route('reservation.create') }}"><i class="fa fa-circle-o"></i>Manual Booking</a></li>
+              <li><a href="{{ route('reservation.getPaypal') }}"><i class="fa fa-circle-o"></i>Online Booking</a></li>
+              {{-- <li><a href="{{ route('playground.reserved') }}"><i class="fa fa-circle-o"></i>Reserved Times</a></li> --}}
             </ul>
           </li>
         @endif

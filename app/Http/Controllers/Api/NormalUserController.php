@@ -101,6 +101,22 @@ class NormalUserController extends BaseController
             ],  'Playground available hours retrieved successfully');
     }
 
+    /*
+    * get reserved hours by auth user
+    */
+    public function userReservedHours() {
+        $user_id = request('id');
+        $user = User::findOrFail($user_id);
+        $reservations = Reservation::with('users','playground','slots')
+            ->where('user_id',$user->id)
+            ->where('date', '>=', date('Y-m-d'))
+            ->paginate(10);
+            if ($reservations->isEmpty()) {
+                return $this->sendError(['Not found reserved hours before']);
+            }
+        return $this->sendResponse($reservations, 'Reserved hours retrieved successfully');
+    }
+
 
     /*
     	payment types is [0,1] 

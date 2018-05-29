@@ -177,7 +177,6 @@ class ReservationController extends Controller
     // stop this methood until know customer requirements
     public function view($id) {
         $playground = Playground::findOrFail($id);
-
         $mm = $playground->slots()->pluck('slot_id');
     	return view('reservations.view', compact('playground','usersHasReserve'));
     }
@@ -202,12 +201,14 @@ class ReservationController extends Controller
         $reservedSlotsIds = $playground->reservations->pluck('slot_id');
 
         $dateTime = Carbon::now();
-        $currentTime = $dateTime->format('g:i a');
+        $currentTime = $dateTime->format('H:i a');
+        // $curr = strtotime($currentTime);
+
 
         // fetch Un-Reserved slots where current time less than max time of each slot
         $checkedSlots = $playground->slots()->wherePivot('date','=',$date)
                 ->whereNotIn('slot_id',$reservedSlotsIds)
-                ->where('max_time','>',$currentTime)
+                ->where('max_time', '>', $currentTime)
                 ->get();
 
         return response()->json($checkedSlots);

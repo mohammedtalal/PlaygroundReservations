@@ -2,7 +2,9 @@
 
 use App\Playground;
 use App\PlaygroundSlot;
+use App\Reservation;
 use App\Slot;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,8 +13,13 @@ use Illuminate\Support\Facades\Input;
 
 Route::Auth();
 Auth::routes();
-Route::get('api-doc', function() {
-	return view('api-doc');
+Route::get('test', function() {
+	// $user = User::findOrFail(5);
+ //        $reservations = Reservation::with('users','playground','slots')
+ //            ->where('user_id',$user->id)
+ //            ->where('date', '>=', date('Y-m-d'))
+ //            ->paginate(10);
+ //            return response()->json($reservations);
 });
 
 /*================ Start Dashboard Routes  ================*/
@@ -39,17 +46,21 @@ Route::group(['middleware' => 'auth:web'], function () {
 	Route::post('admin/PL/{id}/update','PlaygroundController@update')->name('playgrounds.update');
 	Route::delete('admin/PL/{id}/destroy','PlaygroundController@destroy')->name('playgrounds.destroy')->middleware('role:admin');
 
-	// get All owner playgrounds
-	Route::get('admin/PLS','PlaygroundController@ownerPlaygrounds')->name('ownerPlaygrounds.index'); 
+	
+	Route::get('admin/PLS','PlaygroundController@ownerPlaygrounds')->name('ownerPlaygrounds.index'); // get All owner playgrounds
 	// get owner playground schedule view
 	Route::get('admin/PL/{id}/schedule/create','PlaygroundController@createPlaygroundSchedule')->name('playgroundSchedule.create'); 
 	Route::post('admin/PL/{id}/schedule/store','PlaygroundController@storePlaygroundSchedule')->name('playgroundSchedule.store'); 
-	// ajax get request to fetch slots based on date
-	Route::get('admin/PL/{id}', 'PlaygroundController@getChecks');
+	Route::get('admin/PL/{id}', 'PlaygroundController@getChecks'); // ajax get request to fetch slots based on date
 
-	/*==================== Playground Reservations Routes ====================*/
+	/*===================== Reserved times Routes ====================*/
+	Route::get('admin/PL/{id}/reserved','PlaygroundController@playgroundRreservedHours')->name('playground.reserved');
+	Route::get('admin/reserved/{id}', 'PlaygroundController@getReservedHours'); // ajax get request to fetch reserved hours based on date
+	
+
+
+	/*====================  Reservations Routes ====================*/
 	Route::get('admin/reservations','ReservationController@index')->name('reservation.index');
-
 	Route::get('admin/reservation/create','ReservationController@create')->name('reservation.create');
 	Route::get('admin/cost/{id}','ReservationController@getCost'); //ajax to get playground cost based on choosing playground
 	Route::get('admin/available/{id}','ReservationController@getAvailableSlots'); //ajax to get available slots for playground
