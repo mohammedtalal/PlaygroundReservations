@@ -14,7 +14,7 @@ class BaseController extends Controller
     public function sendResponse($result=[], $message=[], $slots=[])
     {
     	$response = [
-            'status' => true,
+            'success' => true,
             'message' => $message,
             'data'    => $result,
         ];

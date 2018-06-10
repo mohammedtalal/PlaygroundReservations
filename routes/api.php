@@ -39,6 +39,7 @@ Route::group(['middleware' => ['jwt.auth']], function() {
 	Route::post('user/PL/hours','Api\NormalUserController@userReservedHours')->name('user.postPaypal')->middleware('role:user'); 
 
 });
+	Route::post('user/register','Api\NormalUserController@register')->name('user.register'); // user registeration
 	Route::get('user/PL/success','Api\NormalUserController@success')->name('user.success');
 	Route::get('user/PL/fail','Api\NormalUserController@fail')->name('user.fail');
 	

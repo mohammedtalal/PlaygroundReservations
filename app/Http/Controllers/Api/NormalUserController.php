@@ -9,12 +9,11 @@ use App\Reservation;
 use App\Slot;
 use App\User;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use PayPal;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
@@ -27,6 +26,8 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class NormalUserController extends BaseController
 {
@@ -50,6 +51,32 @@ class NormalUserController extends BaseController
             $paypal_conf['secret'])
         );
         $this->api_context->setConfig($paypal_conf['settings']);
+    }
+
+    public function register(Request $request) {
+        $credentials = $request->only('name', 'email', 'password','role_id','phone', 'password_confirmation');
+        $rules = [
+            'name' => 'required|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',  
+            'password' => 'required|min:6|confirmed',
+            'phone' => 'required'
+        ];
+        $validator = Validator::make($credentials, $rules);
+        if($validator->fails()) {
+            return $this->sendError($validator->messages());
+        }
+        $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => \Hash::make($request->password),
+                'role_id' => 3,
+                'phone' => $request->phone
+            ]);
+        if (!$user) {       
+            return $this->sendError('Failed to register, please try again');
+        }        
+        return response()->json(['success' => true, 'message'=> "Thanks for signing up, try to login with your credentials"]);
+
     }
 
     public function index() {
@@ -232,7 +259,7 @@ class NormalUserController extends BaseController
         if ($result->getState() == 'approved') {
             /** store reservation data into DB   */
             Reservation::create($reservation_data);
-            return response()->json(["status"  => true, "message" => "Payment Success and Playground reserved done"]);
+            return response()->json(["success"  => true, "message" => "Payment Success and Playground reserved done"]);
         }
             return response()->json('Payment Fail');
     }

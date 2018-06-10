@@ -15,7 +15,8 @@ class UserController extends Controller
                 'name' => 'required|max:255',
                 'email' => 'required|email|max:255|unique:users',
                 'password' => 'required|min:6|confirmed',
-                'role_id' => 'required'
+                'role_id' => 'required',
+                'phone' => 'required|regex:/(01)[0-9]{9}/'
             ];
     }
 
@@ -40,7 +41,6 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success','Created User Successfully');
         }
         return redirect()->back()->with('danger','Failed to save');
-
     }
 
     public function edit($id) {
